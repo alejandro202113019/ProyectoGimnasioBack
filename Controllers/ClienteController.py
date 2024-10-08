@@ -14,12 +14,36 @@ class ClienteController:
         return cliente.to_dict() if cliente else None
 
     def crear_cliente(self, cliente_data):
-        nuevo_cliente = Cliente(**cliente_data)
-        return self.service.crear_cliente(nuevo_cliente)
+        # Validate required fields
+        required_fields = ['Nombre', 'Apellido', 'Fecha_Nacimiento', 'Email', 'Telefono']
+        for field in required_fields:
+            if field not in cliente_data or not cliente_data[field]:
+                return None, f"El campo '{field}' es requerido y no puede estar vacío."
+
+        nuevo_cliente = Cliente(
+            Nombre=cliente_data['Nombre'],
+            Apellido=cliente_data['Apellido'],
+            Fecha_Nacimiento=cliente_data['Fecha_Nacimiento'],
+            Email=cliente_data['Email'],
+            Telefono=cliente_data['Telefono']
+        )
+        created_cliente_id = self.service.crear_cliente(nuevo_cliente)
+        if created_cliente_id:
+            return created_cliente_id, None
+        return None, "No se pudo crear el cliente."
 
     def actualizar_cliente(self, id_cliente, cliente_data):
-        cliente_data['ID_Cliente'] = id_cliente
-        cliente_actualizado = Cliente(**cliente_data)
+        cliente_existente = self.service.obtener_cliente_por_id(id_cliente)
+        if not cliente_existente:
+            return False
+        cliente_actualizado = Cliente(
+            ID_Cliente=id_cliente,
+            Nombre=cliente_data.get('Nombre'),
+            Apellido=cliente_data.get('Apellido'),
+            Fecha_Nacimiento=cliente_data.get('Fecha_Nacimiento'),
+            Email=cliente_data.get('Email'),
+            Telefono=cliente_data.get('Telefono')
+        )
         return self.service.actualizar_cliente(cliente_actualizado)
 
     def eliminar_cliente(self, id_cliente):

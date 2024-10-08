@@ -20,14 +20,24 @@ def obtener_cliente(id_cliente):
 @app.route('/clientes', methods=['POST'])
 def crear_cliente():
     datos = request.json
-    resultado = cliente_controller.crear_cliente(datos)
+    if not datos:
+        return jsonify({"error": "Datos no proporcionados"}), 400
+    
+    resultado, error_message = cliente_controller.crear_cliente(datos)
+    
+    if error_message:
+        return jsonify({"error": error_message}), 400
+    
     if resultado:
-        return jsonify({"mensaje": "Cliente creado exitosamente"}), 201
+        return jsonify({"mensaje": "Cliente creado exitosamente", "id": resultado}), 201
+    
     return jsonify({"error": "No se pudo crear el cliente"}), 400
 
 @app.route('/clientes/<int:id_cliente>', methods=['PUT'])
 def actualizar_cliente(id_cliente):
     datos = request.json
+    if not datos:
+        return jsonify({"error": "Datos no proporcionados"}), 400
     resultado = cliente_controller.actualizar_cliente(id_cliente, datos)
     if resultado:
         return jsonify({"mensaje": "Cliente actualizado exitosamente"}), 200
@@ -38,7 +48,8 @@ def eliminar_cliente(id_cliente):
     resultado = cliente_controller.eliminar_cliente(id_cliente)
     if resultado:
         return jsonify({"mensaje": "Cliente eliminado exitosamente"}), 200
-    return jsonify({"error": "No se pudo eliminar el cliente"}), 404
+    return jsonify({"error": "No se pudo eliminar el cliente. Puede que tenga registros asociados que no se pudieron eliminar."}), 400
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
