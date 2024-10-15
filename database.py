@@ -1,5 +1,5 @@
 import mysql.connector
-from mysql.connector import Error
+from mysql.connector import Error, pooling
 from datetime import date
 
 class Database:
@@ -9,28 +9,32 @@ class Database:
         self.database = "BD_Gimnasio"
         self.user = "admins"
         self.password = "ProyecGym2024"
-        self.connection = None
+        self.pool = None
 
     def connect(self):
         try:
-            self.connection = mysql.connector.connect(
+            self.pool = pooling.MySQLConnectionPool(
+                pool_name="mypool",
+                pool_size=5,
                 host=self.host,
                 port=self.port,
                 database=self.database,
                 user=self.user,
                 password=self.password
             )
-            print("Conexión exitosa a la base de datos.")
+            print("Pool de conexiones creado exitosamente.")
         except Error as e:
-            print(f"Error al conectar a la base de datos: {e}")
+            print(f"Error al crear el pool de conexiones: {e}")
 
-    def disconnect(self):
-        if self.connection:
-            self.connection.close()
+    def get_connection(self):
+        return self.pool.get_connection()
 
     def realizar_consulta(self, query, params=None):
+        connection = None
+        cursor = None
         try:
-            cursor = self.connection.cursor(dictionary=True)
+            connection = self.get_connection()
+            cursor = connection.cursor(dictionary=True)
             if params:
                 cursor.execute(query, params)
             else:
@@ -47,20 +51,30 @@ class Database:
             print(f"Error al realizar la consulta: {e}")
             return None
         finally:
-            cursor.close()
+            if cursor:
+                cursor.close()
+            if connection:
+                connection.close()
 
     def consultas_update_delete(self, query, params=None):
+        connection = None
+        cursor = None
         try:
-            cursor = self.connection.cursor()
+            connection = self.get_connection()
+            cursor = connection.cursor()
             if params:
                 cursor.execute(query, params)
             else:
                 cursor.execute(query)
-            self.connection.commit()
+            connection.commit()
             return cursor.rowcount
         except Error as e:
             print(f"Error al realizar la operación: {e}")
-            self.connection.rollback()
+            if connection:
+                connection.rollback()
             return 0
         finally:
-            cursor.close()
+            if cursor:
+                cursor.close()
+            if connection:
+                connection.close()

@@ -1,8 +1,10 @@
 #servicios.py
 from flask import Flask, request, jsonify
 from Controllers.ClienteController import ClienteController
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 cliente_controller = ClienteController()
 
 @app.route('/clientes', methods=['GET'])
