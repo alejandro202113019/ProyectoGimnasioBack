@@ -1,0 +1,14 @@
+Cliente
+{
+    "Apellido": "Messi",
+    "Email": "alejandro.mesa@example.com",
+    "Fecha_Nacimiento": "Fri, 10 Feb 1995 00:00:00 GMT",
+    "ID_Cliente": 200,
+    "Nombre": "alejandro",
+    "Telefono": "3178899001"
+}
+GET http://localhost:5001/clientes
+GET http://localhost:5001/clientes/200
+POST http://localhost:5001/clientes
+DELETE http://localhost:5001/clientes/200
+PUT http://localhost:5001/clientes/200
