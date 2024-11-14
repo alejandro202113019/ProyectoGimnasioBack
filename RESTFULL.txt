@@ -7,8 +7,8 @@ Cliente
     "Nombre": "alejandro",
     "Telefono": "3178899001"
 }
-GET http://localhost:5001/clientes
-GET http://localhost:5001/clientes/200
-POST http://localhost:5001/clientes
-DELETE http://localhost:5001/clientes/200
-PUT http://localhost:5001/clientes/200
+GET http://localhost:5001/api/clientes
+GET http://localhost:5001/api/clientes/200
+POST http://localhost:5001/api/clientes
+DELETE http://localhost:5001/api/clientes/200
+PUT http://localhost:5001/api/clientes/200
