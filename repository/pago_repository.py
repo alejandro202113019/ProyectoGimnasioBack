@@ -6,12 +6,12 @@ class PagoRepository:
         self.db = Database()
 
     def obtener_todos(self):
-        query = """
-        SELECT p.*, m.ID_Cliente, CONCAT(c.Nombre, ' ', c.Apellido) as Nombre_Cliente 
-        FROM Pago p 
-        JOIN Membresia m ON p.ID_Membresia = m.ID_Membresia 
-        JOIN Cliente c ON m.ID_Cliente = c.ID_Cliente
-        """
+        query1 = """SELECT Pago.*, Membresia.ID_Cliente, Cliente.Nombre || ' ' || Cliente.Apellido AS Nombre_Completo_Cliente 
+        FROM  Pago INNER JOIN Membresia ON Membresia.ID_Membresia = Pago.ID_Membresia INNER JOIN Cliente ON Cliente.ID_Cliente = Membresia.ID_Cliente"""
+        
+        query = "Select * FROM Pago"
+        
+        # return self.db.execute_query(query, dictionary=True)
         return self.db.execute_query(query, dictionary=True)
 
     def obtener_por_id(self, id_pago):
@@ -22,6 +22,7 @@ class PagoRepository:
         JOIN Cliente c ON m.ID_Cliente = c.ID_Cliente 
         WHERE p.ID_Pago = %s
         """
+        
         resultados = self.db.execute_query(query, (id_pago,), dictionary=True)
         return resultados[0] if resultados else None
 

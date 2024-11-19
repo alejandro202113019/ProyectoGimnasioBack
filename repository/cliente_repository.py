@@ -5,7 +5,15 @@ class ClienteRepository:
         self.db = Database()
 
     def obtener_todos(self):
-        query = "SELECT * FROM Cliente"
+        
+        query = "UPDATE Membresia set Estado = 'Inactiva' WHERE Fecha_Fin < CURRENT_DATE"
+        self.db.execute_query(query, dictionary=True)
+        
+        query = "UPDATE Membresia set Estado = 'Activa' WHERE Fecha_Fin > CURRENT_DATE"
+        self.db.execute_query(query, dictionary=True)
+        
+        query = """SELECT Cliente.*, Plan.Nombre_Plan, Membresia.Estado
+        FROM Cliente LEFT JOIN Membresia ON Cliente.ID_Cliente = Membresia.ID_Cliente LEFT JOIN Plan ON Membresia.ID_Plan = Plan.ID_Plan"""
         return self.db.execute_query(query, dictionary=True)
 
     def obtener_por_id(self, id_cliente):
