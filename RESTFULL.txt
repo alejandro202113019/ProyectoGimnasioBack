@@ -12,3 +12,5 @@ GET http://localhost:5001/api/clientes/200
 POST http://localhost:5001/api/clientes
 DELETE http://localhost:5001/api/clientes/200
 PUT http://localhost:5001/api/clientes/200
+
+pip install Flask Flask-CORS mysql-connector-python

@@ -12,11 +12,13 @@ from controller.horario_controller import horario_blueprint
 from controller.asistencia_controller import asistencia_blueprint
 from controller.pago_controller import pago_blueprint
 from controller.equipo_controller import equipo_blueprint
+from controller.auth_controller import auth_blueprint
 
 app = Flask(__name__)
 CORS(app)
 
 # Registramos los blueprints de cada controlador
+app.register_blueprint(auth_blueprint, url_prefix='/api/auth')
 app.register_blueprint(cliente_blueprint, url_prefix='/api')
 app.register_blueprint(plan_blueprint, url_prefix='/api')
 app.register_blueprint(membresia_blueprint, url_prefix='/api')
