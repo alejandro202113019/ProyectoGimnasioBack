@@ -6,25 +6,21 @@ class PagoRepository:
         self.db = Database()
 
     def obtener_todos(self):
-        query1 = """SELECT Pago.*, Membresia.ID_Cliente, Cliente.Nombre || ' ' || Cliente.Apellido AS Nombre_Completo_Cliente 
-        FROM  Pago INNER JOIN Membresia ON Membresia.ID_Membresia = Pago.ID_Membresia INNER JOIN Cliente ON Cliente.ID_Cliente = Membresia.ID_Cliente"""
-        
-        query = "Select * FROM Pago"
+        query = """SELECT Pago.*, Membresia.ID_Cliente, CONCAT(Cliente.Nombre, ' ', Cliente.Apellido) AS Nombre_Completo_Cliente, Plan.Nombre_Plan
+        FROM  Pago INNER JOIN Membresia ON Membresia.ID_Membresia = Pago.ID_Membresia INNER JOIN Cliente ON Cliente.ID_Cliente = Membresia.ID_Cliente
+        INNER JOIN Plan ON Membresia.ID_Plan = Plan.ID_Plan"""
+
         
         # return self.db.execute_query(query, dictionary=True)
         return self.db.execute_query(query, dictionary=True)
 
     def obtener_por_id(self, id_pago):
-        query = """
-        SELECT p.*, m.ID_Cliente, CONCAT(c.Nombre, ' ', c.Apellido) as Nombre_Cliente 
-        FROM Pago p 
-        JOIN Membresia m ON p.ID_Membresia = m.ID_Membresia 
-        JOIN Cliente c ON m.ID_Cliente = c.ID_Cliente 
-        WHERE p.ID_Pago = %s
+        query = """SELECT Pago.*, Membresia.ID_Cliente, CONCAT(Cliente.Nombre, ' ', Cliente.Apellido) AS Nombre_Completo_Cliente, Plan.Nombre_Plan
+        FROM  Pago INNER JOIN Membresia ON Membresia.ID_Membresia = Pago.ID_Membresia INNER JOIN Cliente ON Cliente.ID_Cliente = Membresia.ID_Cliente
+        INNER JOIN Plan ON Membresia.ID_Plan = Plan.ID_Plan WHERE Cliente.ID_Cliente = %s
         """
         
-        resultados = self.db.execute_query(query, (id_pago,), dictionary=True)
-        return resultados[0] if resultados else None
+        return self.db.execute_query(query, (id_pago,), dictionary=True)
 
     def obtener_por_membresia(self, id_membresia):
         query = "SELECT * FROM Pago WHERE ID_Membresia = %s"

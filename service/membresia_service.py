@@ -28,7 +28,7 @@ class MembresiaService:
         return "Membresía modificada exitosamente"
     
     def eliminar(self, id_membresia):
-        membresia_existente = self.membresia_repository.obtener_por_id(id_membresia)
+        membresia_existente = self.membresia_repository.obtener_por_id_2(id_membresia)
         if not membresia_existente:
             raise Exception('Membresía no encontrada')
             
