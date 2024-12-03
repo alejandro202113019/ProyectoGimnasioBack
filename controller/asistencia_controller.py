@@ -13,15 +13,16 @@ def obtener_asistencias():
     except Exception as e:
         return jsonify({'error': str(e)}), 200
 
-@asistencia_blueprint.route('/asistencias/<int:id_asistencia>', methods=['GET'])
-def obtener_asistencia(id_asistencia):
+@asistencia_blueprint.route('/asistencias/<int:id_cliente>', methods=['GET'])
+def obtener_asistencia(id_cliente):
     try:
-        asistencia = asistencia_service.obtener_por_id(id_asistencia)
+        asistencia = asistencia_service.obtener_por_id(id_cliente)
         if asistencia:
             return jsonify(asistencia), 200
         return jsonify({'error': 'Asistencia no encontrada'}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 200
+
 
 @asistencia_blueprint.route('/asistencias', methods=['POST'])
 def crear_asistencia():
@@ -48,3 +49,4 @@ def eliminar_asistencia(id_asistencia):
         return jsonify({'message': mensaje}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 200
+

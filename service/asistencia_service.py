@@ -18,7 +18,7 @@ class AsistenciaService:
         return "Asistencia registrada exitosamente"
     
     def actualizar(self, id_asistencia, asistencia_data):
-        asistencia_existente = self.asistencia_repository.obtener_por_id(id_asistencia)
+        asistencia_existente = self.asistencia_repository.obtener_por_idAsistencia(id_asistencia)
         if not asistencia_existente:
             raise Exception('Asistencia no encontrada')
         
@@ -28,7 +28,7 @@ class AsistenciaService:
         return "Asistencia modificada exitosamente"
     
     def eliminar(self, id_asistencia):
-        asistencia_existente = self.asistencia_repository.obtener_por_id(id_asistencia)
+        asistencia_existente = self.asistencia_repository.obtener_por_idAsistencia(id_asistencia)
         if not asistencia_existente:
             raise Exception('Asistencia no encontrada')
             
