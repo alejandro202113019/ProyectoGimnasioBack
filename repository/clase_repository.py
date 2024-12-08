@@ -5,16 +5,14 @@ class ClaseRepository:
         self.db = Database()
 
     def obtener_todos(self):
-        query = """
-        SELECT c.*, i.Nombre as Instructor_Nombre, i.Apellido as Instructor_Apellido 
-        FROM Clase c 
-        JOIN Instructor i ON c.ID_Instructor = i.ID_Instructor
+        query = """SELECT c.*, CONCAT(i.Nombre,' ',i.Apellido) as Nombre_Instructor, h.*
+        FROM Clase c JOIN Horario h ON c.ID_Clase = h.ID_Clase
+        JOIN Instructor i ON c.ID_Instructor = i.ID_Instructor 
         """
         return self.db.execute_query(query, dictionary=True)
 
     def obtener_por_id(self, id_clase):
-        query = """
-        SELECT c.*, i.Nombre as Instructor_Nombre, i.Apellido as Instructor_Apellido 
+        query = """SELECT c.*, i.Nombre as Instructor_Nombre, i.Apellido as Instructor_Apellido 
         FROM Clase c 
         JOIN Instructor i ON c.ID_Instructor = i.ID_Instructor 
         WHERE c.ID_Clase = %s
@@ -40,5 +38,9 @@ class ClaseRepository:
         return self.db.execute_query(query, params)
 
     def eliminar(self, id_clase):
+        
+        query = "DELETE FROM Horario WHERE ID_Clase = %s"
+        self.db.execute_query(query, (id_clase,))
+
         query = "DELETE FROM Clase WHERE ID_Clase = %s"
         return self.db.execute_query(query, (id_clase,))

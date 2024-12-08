@@ -13,12 +13,12 @@ class AsistenciaRepository:
     def obtener_por_id(self, id_cliente):
         query = """SELECT `ID_Asistencia`,`ID_Cliente`, CONCAT(`Nombre`,' ',`Apellido`) AS `NombreCompleto`,`FechaAsistencia`,`Hora_Entrada`,`Hora_Salida` FROM `Asistencia` JOIN `Cliente` USING (`ID_Cliente`) WHERE ID_CLiente = %s"""
         resultados = self.db.execute_query(query, (id_cliente,), dictionary=True)
-        return resultados[0] if resultados else None
+        return resultados
 
     def obtener_por_idAsistencia(self, id_asistencia):
         query = """SELECT `ID_Asistencia`,`ID_Cliente`, CONCAT(`Nombre`,' ',`Apellido`) AS `NombreCompleto`,`FechaAsistencia`,`Hora_Entrada`,`Hora_Salida` FROM `Asistencia` JOIN `Cliente` USING (`ID_Cliente`) WHERE ID_Asistencia = %s"""
         resultados = self.db.execute_query(query, (id_asistencia,), dictionary=True)
-        return resultados[0] if resultados else None
+        return resultados
 
     def crear(self, asistencia):
         query = """INSERT INTO `Asistencia` (`ID_Cliente`, `FechaAsistencia`, `Hora_Entrada`, `Hora_Salida`) VALUES (%s, %s, %s, %s)"""

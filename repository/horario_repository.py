@@ -6,16 +6,14 @@ class HorarioRepository:
         self.db = Database()
 
     def obtener_todos(self):
-        query = """
-        SELECT h.*, c.Nombre_Clase 
+        query = """SELECT h.*, c.Nombre_Clase, CONCAT(i.Nombre,' ',i.Apellido) as Nombre_Instructor
         FROM Horario h 
-        JOIN Clase c ON h.ID_Clase = c.ID_Clase
+        JOIN Clase c ON h.ID_Clase = c.ID_Clase JOIN Instructor i ON c.ID_Instructor = i.ID_Instructor
         """
         return self.db.execute_query(query, dictionary=True)
 
     def obtener_por_id(self, id_horario):
-        query = """
-        SELECT h.*, c.Nombre_Clase 
+        query = """SELECT h.*, c.Nombre_Clase 
         FROM Horario h 
         JOIN Clase c ON h.ID_Clase = c.ID_Clase 
         WHERE h.ID_Horario = %s
@@ -30,8 +28,8 @@ class HorarioRepository:
     def crear(self, horario):
         query = """INSERT INTO Horario (ID_Clase, Dia_Semana, 
                                       Hora_Inicio, Hora_Fin)
-                   VALUES (%s, %s, %s, %s)"""
-        params = (horario.ID_Clase, horario.Dia_Semana,
+                   VALUES ((SELECT MAX(ID_Clase) FROM Clase), %s, %s, %s)"""
+        params = (horario.Dia_Semana,
                  horario.Hora_Inicio, horario.Hora_Fin)
         return self.db.execute_query(query, params)
 
