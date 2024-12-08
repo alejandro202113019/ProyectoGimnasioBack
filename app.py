@@ -14,6 +14,7 @@ from controller.pago_controller import pago_blueprint
 from controller.equipo_controller import equipo_blueprint
 from controller.auth_controller import auth_blueprint
 from controller.gasto_controller import gasto_blueprint
+from controller.finanzas_controller import finanzas_bp
 
 app = Flask(__name__)
 CORS(app)
@@ -30,5 +31,7 @@ app.register_blueprint(asistencia_blueprint, url_prefix='/api')
 app.register_blueprint(pago_blueprint, url_prefix='/api')
 app.register_blueprint(equipo_blueprint, url_prefix='/api')
 app.register_blueprint(gasto_blueprint, url_prefix='/api')
+app.register_blueprint(finanzas_bp, url_prefix='/api')
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001, debug=True)
