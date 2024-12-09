@@ -34,4 +34,4 @@ app.register_blueprint(gasto_blueprint, url_prefix='/api')
 app.register_blueprint(finanzas_bp, url_prefix='/api')
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5001, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=False)

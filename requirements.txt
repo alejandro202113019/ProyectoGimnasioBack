@@ -8,3 +8,6 @@ MarkupSafe==2.1.5
 Werkzeug==3.0.4
 flask-cors==4.0.1
 mysql-connector-python
+pyjwt
+python-dotenv
+bcrypt
