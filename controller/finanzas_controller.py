@@ -11,7 +11,7 @@ def obtener_ingresos_totales():
     return jsonify({"ingresos_totales": ingresos_totales})
 
 
-@finanzas_bp.route('/gastos', methods=['GET'])
+@finanzas_bp.route('/gastosTotales', methods=['GET'])
 def obtener_gastos_totales():
     gastos_totales = finanzas_service.calcular_gastos_totales()
     return jsonify({"gastos_totales": gastos_totales})
@@ -23,7 +23,7 @@ def obtener_balance():
     return jsonify({"balance": balance})
 
 
-@finanzas_bp.route('/gastos/mes', methods=['GET'])
+@finanzas_bp.route('/gastosTotales/mes', methods=['GET'])
 def obtener_gastos_por_mes():
     gastos_por_mes = finanzas_service.obtener_gastos_por_mes()
     return jsonify(gastos_por_mes)

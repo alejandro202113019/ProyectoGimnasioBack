@@ -1,5 +1,4 @@
-from datetime import datetime
-import calendar
+from datetime import datetime, date  # Importa datetime y date
 from repository.plan_repository import PlanRepository
 from repository.gasto_repository import GastoRepository
 
@@ -25,7 +24,17 @@ class FinanzasService:
         gastos_por_mes = {}
 
         for gasto in gastos:
-            fecha = datetime.strptime(gasto['Fecha_Gasto'], '%Y-%m-%d')
+            # Manejar correctamente el tipo de fecha
+            if isinstance(gasto['Fecha_Gasto'], datetime):
+                fecha = gasto['Fecha_Gasto']
+            elif isinstance(gasto['Fecha_Gasto'], str):
+                fecha = datetime.strptime(gasto['Fecha_Gasto'], '%Y-%m-%d')
+            elif isinstance(gasto['Fecha_Gasto'], date):  # Si es un objeto date
+                fecha = datetime.combine(gasto['Fecha_Gasto'], datetime.min.time())
+            else:
+                raise ValueError(f"Formato de fecha desconocido: {type(gasto['Fecha_Gasto'])}")
+
+            # Formatear al formato 'YYYY-MM'
             mes_anio = fecha.strftime('%Y-%m')
             if mes_anio not in gastos_por_mes:
                 gastos_por_mes[mes_anio] = 0
